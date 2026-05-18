@@ -47,23 +47,23 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 def get_all_users(db: Session = Depends(database.get_db)):
     return db.query(models.User).all()
 
-@app.post("/api/register") # คืนค่าสั้น ๆ แบบที่คุณถนัด หรือจะใช้ response_model=schemas.UserResponse ก็ได้ครับ
+@app.post("/api/register") 
 def register_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     try:
-        # 1. เช็คว่า email ซ้ำในระบบไหมก่อนสมัคร
+        # เช็คว่า email ซ้ำในระบบไหมก่อนสมัคร
         db_user = db.query(models.User).filter(models.User.email == user.email).first()
         if db_user:
             raise HTTPException(status_code=400, detail="อีเมลนี้ถูกใช้งานแล้ว")
         
-        # 2. เช็คว่า username ซ้ำไหม (ป้องกันไว้เผื่อระบบคุณล็อกไม่ให้ชื่อซ้ำ)
+        # ช็คว่า username ซ้ำไหม (ป้องกันไว้เผื่อระบบคุณล็อกไม่ให้ชื่อซ้ำ)
         db_username = db.query(models.User).filter(models.User.username == user.username).first()
         if db_username:
             raise HTTPException(status_code=400, detail="Username นี้ถูกใช้งานแล้ว")
 
-        # 3. เข้ารหัสผ่าน
+        # เข้ารหัสผ่าน
         hashed_pwd = auth_utils.hash_password(user.password)
         
-        # 4. ประกอบร่างโมเดลเตรียมบันทึก
+        # ประกอบร่างโมเดลเตรียมบันทึก
         new_user = models.User(
             username=user.username,
             fullname=user.fullname,
@@ -78,7 +78,7 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(database.get_d
         db.commit()
         db.refresh(new_user) # ดึงค่า id ที่เพิ่ง Gen จาก DB กลับมาใส่ในตัวแปร
 
-        # 5. ส่งผลลัพธ์กลับหน้าบ้านแบบที่คุณชอบใช้งาน
+        # ส่งผลลัพธ์กลับหน้าบ้านแบบที่คุณชอบใช้งาน
         return {
             "status": "success",
             "user_id": new_user.id
@@ -121,7 +121,6 @@ def login(user_data: dict, db: Session = Depends(database.get_db)):
 @app.get("/api/holidays")
 def get_holidays(db: Session = Depends(get_db)):
     holidays = db.query(PublicHoliday).all()
-    # ส่งออกเป็น ["2026-01-01", "2026-03-03", ...]
     return [h.holiday_date.strftime("%Y-%m-%d") for h in holidays]
 
 
@@ -151,7 +150,6 @@ def search_users(q: str = "", db: Session = Depends(get_db)):
 
 @app.get("/api/teams")
 def get_user_teams(db: Session = Depends(get_db)):
-    # ในอนาคตควรดึงตาม user_id ที่ Login อยู่ แต่ตอนนี้ดึงทั้งหมดมาทดสอบก่อน
     teams = db.query(Team).all()
     
     result = {}
