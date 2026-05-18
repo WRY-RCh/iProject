@@ -47,42 +47,51 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 def get_all_users(db: Session = Depends(database.get_db)):
     return db.query(models.User).all()
 
-@app.post("/api/register")
-def create_user(user_data: dict, db: Session = Depends(database.get_db)):
-    # เข้ารหัสผ่านก่อนบันทึกตามดีไซน์คุณ
-    hashed_pwd = auth_utils.hash_password(user_data['password'])
-    new_user = models.User(
-        username=user_data['username'],
-        fullname=user_data['fullname'],
-        email=user_data['email'],
-        password=hashed_pwd,
-        role_id=user_data['role_id'],
-        position_id=user_data['position_id']
-    )
-    db.add(new_user)
-    db.commit()
-    return {"status": "success"}
-
-@app.post("/api/register", response_model=schemas.UserResponse)
+@app.post("/api/register") # คืนค่าสั้น ๆ แบบที่คุณถนัด หรือจะใช้ response_model=schemas.UserResponse ก็ได้ครับ
 def register_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
-    # เช็คว่า email ซ้ำไหม
-    db_user = db.query(models.User).filter(models.User.email == user.email).first()
-    if db_user:
-        raise HTTPException(status_code=400, detail="อีเมลนี้ถูกใช้งานแล้ว")
-    
-    hashed_pwd = auth_utils.hash_password(user.password)
-    new_user = models.User(
-        username=user.username,
-        fullname=user.fullname,
-        email=user.email,
-        password=hashed_pwd,
-        role_id=user.role_id,
-        status="Active"
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+    try:
+        # 1. เช็คว่า email ซ้ำในระบบไหมก่อนสมัคร
+        db_user = db.query(models.User).filter(models.User.email == user.email).first()
+        if db_user:
+            raise HTTPException(status_code=400, detail="อีเมลนี้ถูกใช้งานแล้ว")
+        
+        # 2. เช็คว่า username ซ้ำไหม (ป้องกันไว้เผื่อระบบคุณล็อกไม่ให้ชื่อซ้ำ)
+        db_username = db.query(models.User).filter(models.User.username == user.username).first()
+        if db_username:
+            raise HTTPException(status_code=400, detail="Username นี้ถูกใช้งานแล้ว")
+
+        # 3. เข้ารหัสผ่าน
+        hashed_pwd = auth_utils.hash_password(user.password)
+        
+        # 4. ประกอบร่างโมเดลเตรียมบันทึก
+        new_user = models.User(
+            username=user.username,
+            fullname=user.fullname,
+            email=user.email,
+            password=hashed_pwd,
+            role_id=user.role_id,
+            position_id=user.position_id, # ✅ ดึงจาก Schema มารวมเรียบร้อย
+            status="Active"               # ✅ ล็อกสเตตัสเปิดใช้งานทันที
+        )
+        
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user) # ดึงค่า id ที่เพิ่ง Gen จาก DB กลับมาใส่ในตัวแปร
+
+        # 5. ส่งผลลัพธ์กลับหน้าบ้านแบบที่คุณชอบใช้งาน
+        return {
+            "status": "success",
+            "user_id": new_user.id
+        }
+
+    except HTTPException as http_exc:
+        # ถ้าติดเงื่อนไขอีเมล/Username ซ้ำ ให้โยน Error ออกไปตามปกติ
+        raise http_exc
+    except Exception as e:
+        db.rollback()
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"เกิดข้อผิดพลาดภายในระบบ: {str(e)}")
 
 @app.post("/api/login")
 def login(user_data: dict, db: Session = Depends(database.get_db)):

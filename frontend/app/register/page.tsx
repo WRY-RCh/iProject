@@ -35,7 +35,7 @@ export default function RegisterPage() {
 
       await axios.post('http://localhost:8000/api/register', payload);
       alert('สร้างบัญชีสำเร็จ!');
-      window.location.href = '/admin/users';
+      window.location.href = '/login';
     } catch (error: any) {
       alert('ข้อผิดพลาด: ' + (error.response?.data?.detail || 'ลองใหม่อีกครั้ง'));
     }
