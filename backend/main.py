@@ -70,15 +70,14 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(database.get_d
             email=user.email,
             password=hashed_pwd,
             role_id=user.role_id,
-            position_id=user.position_id, # ✅ ดึงจาก Schema มารวมเรียบร้อย
-            status="Active"               # ✅ ล็อกสเตตัสเปิดใช้งานทันที
+            position_id=user.position_id, 
+            status="Active"              
         )
         
         db.add(new_user)
         db.commit()
-        db.refresh(new_user) # ดึงค่า id ที่เพิ่ง Gen จาก DB กลับมาใส่ในตัวแปร
+        db.refresh(new_user)
 
-        # ส่งผลลัพธ์กลับหน้าบ้านแบบที่คุณชอบใช้งาน
         return {
             "status": "success",
             "user_id": new_user.id
