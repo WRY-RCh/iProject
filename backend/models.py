@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Text, Date, DateTime, Numeric, ForeignKey, ARRAY
+from sqlalchemy import Column, Integer, String, Text, Date, DateTime, Numeric, ForeignKey, ARRAY, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base
+import datetime
 
 class User(Base):
     __tablename__ = "users"
@@ -81,7 +82,7 @@ class PublicHoliday(Base):
     description = Column(String(255)) # ชื่อวันหยุด เช่น "วันจักรี"
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-# 1. ตารางโครงการหลัก
+# ตารางโครงการหลัก
 class Project(Base):
     __tablename__ = "projects"
 
@@ -100,10 +101,13 @@ class Project(Base):
     grand_total = Column(Numeric(12, 2))
     owner_id = Column(Integer, ForeignKey("users.id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    is_deleted = Column(Boolean, default=False, nullable=False)
 
     phases = relationship("ProjectPhase", back_populates="project", cascade="all, delete-orphan")
     installments = relationship("ProjectInstallment", back_populates="project", cascade="all, delete-orphan")
     access_rights = relationship("ProjectAccess", back_populates="project", cascade="all, delete-orphan")
+    result = relationship("ProjectResult", back_populates="project", uselist=False, cascade="all, delete-orphan")
+    attachments = relationship("ProjectAttachment", back_populates="project", cascade="all, delete-orphan")
 
 class EvaluationOption(Base):
     __tablename__ = "evaluation_options"
@@ -111,7 +115,7 @@ class EvaluationOption(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False, unique=True) 
 
-# 2. ตารางกิจกรรมหลัก (Phases)
+# ตารางกิจกรรมหลัก (Phases)
 class ProjectPhase(Base):
     __tablename__ = "project_phases"
 
@@ -122,7 +126,7 @@ class ProjectPhase(Base):
     project = relationship("Project", back_populates="phases")
     tasks = relationship("PhaseTask", back_populates="phase", cascade="all, delete-orphan")
 
-# 3. ตารางกิจกรรมย่อย (Tasks)
+# ตารางกิจกรรมย่อย (Tasks)
 class PhaseTask(Base):
     __tablename__ = "phase_tasks"
 
@@ -132,10 +136,11 @@ class PhaseTask(Base):
     duration = Column(Integer)
     duration_unit = Column(String(50))
     weight_percentage = Column(Integer)
+    status = Column(Boolean, default=False, nullable=False)
 
     phase = relationship("ProjectPhase", back_populates="tasks")
 
-# 4. ตารางงวดงาน (Installments)
+# ตารางงวดงาน (Installments)
 class ProjectInstallment(Base):
     __tablename__ = "project_installments"
 
@@ -144,12 +149,12 @@ class ProjectInstallment(Base):
     title = Column(String(255))
     main_category = Column(String(100))
     sub_category = Column(String(100))
-    status = Column(String(50), default="Pending")
+    is_approved = Column(Boolean, default=False, nullable=False)
 
     project = relationship("Project", back_populates="installments")
     budget_items = relationship("BudgetItem", back_populates="installment", cascade="all, delete-orphan")
 
-# 5. ตารางรายการงบประมาณ (Budget Items)
+# ตารางรายการงบประมาณ (Budget Items)
 class BudgetItem(Base):
     __tablename__ = "budget_items"
 
@@ -159,13 +164,14 @@ class BudgetItem(Base):
     category_id = Column(Integer, ForeignKey("budget_categories.id"), nullable=False) 
     expense_date = Column(Date)
     amount = Column(Numeric(12, 2))
+    status = Column(Boolean, default=False, nullable=False)
 
     
     category = relationship("BudgetCategory")
     installment = relationship("ProjectInstallment", back_populates="budget_items")
     
 
-# 6. ตารางสิทธิ์การเข้าถึง (Project Access)
+# ตารางสิทธิ์การเข้าถึง (Project Access)
 class ProjectAccess(Base):
     __tablename__ = "project_access"
 
@@ -175,12 +181,41 @@ class ProjectAccess(Base):
     role = Column(String(50)) # เช่น 'Owner', 'Editor'
 
     project = relationship("Project", back_populates="access_rights")
+    user = relationship("User")
 
 class BudgetCategory(Base):
     __tablename__ = "budget_categories"
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False, unique=True)
+
+
+# ตารางสรุปปิดโครงการ (Project Results)
+class ProjectResult(Base):
+    __tablename__ = "project_results"
+
+    id = Column(Integer, primary_key=True, index=True)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), unique=True, nullable=False)
+    summary = Column(Text, nullable=False)  # สรุปความสำเร็จตามวัตถุประสงค์
+    obstacles = Column(Text, nullable=True)   # ปัญหาและอุปสรรค
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    project = relationship("Project", back_populates="result")
+
+
+# ตารางเก็บไฟล์แนบของแต่ละโปรเจกต์ (Project Attachments)
+class ProjectAttachment(Base):
+    __tablename__ = "project_attachments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    file_name = Column(String(255), nullable=False)  # ชื่อไฟล์เดิมที่อัปโหลด
+    file_path = Column(String(255), nullable=False)  # พาร์ทไฟล์ในเซิร์ฟเวอร์
+    file_type = Column(String(50), nullable=True)    # ประเภทไฟล์
+    uploaded_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    project = relationship("Project", back_populates="attachments")
+
 
 
 

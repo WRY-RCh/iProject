@@ -23,7 +23,7 @@ export default function RegisterPage() {
     }
 
     try {
-      // ส่งข้อมูลไปยัง API (ระบุ ID ตามลำดับในฐานข้อมูลของคุณ)
+      // ส่งข้อมูลไปยัง API (ระบุ ID ตามลำดับในฐานข้อมูล)
       const payload = {
         username: formData.username,
         fullname: formData.fullname,

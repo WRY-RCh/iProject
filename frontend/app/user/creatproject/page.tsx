@@ -18,7 +18,7 @@ export default function CreateProject() {
 
 
 
-    // 1. ข้อมูลพื้นฐาน
+    // ข้อมูลพื้นฐาน
     const [projectInfo, setProjectInfo] = useState({
         title: '',
         rationale: '',
@@ -108,7 +108,7 @@ export default function CreateProject() {
 
 
 
-    // 2. จัดการกิจกรรม (Phases & Tasks)
+    // จัดการกิจกรรม (Phases & Tasks)
     useEffect(() => {
         const calculateEndDate = () => {
             if (!projectInfo.start_date) return '';
@@ -131,7 +131,7 @@ export default function CreateProject() {
 
                 const dateString = d.toISOString().split('T')[0];
                 const isWeekend = d.getDay() === 0 || d.getDay() === 6;
-                // ✅ ตรวจสอบวันหยุดจาก Database (dbHolidays)
+                //ตรวจสอบวันหยุดจาก Database (dbHolidays)
                 const isHoliday = dbHolidays.includes(dateString);
 
                 // ถ้าไม่รวมเสาร์-อาทิตย์ และวันนี้เป็นวันหยุด ให้ข้ามไป (ไม่นับ added)
@@ -215,7 +215,7 @@ export default function CreateProject() {
 
 
 
-    // 3. จัดการงบประมาณ (Installments)
+    // จัดการงบประมาณ (Installments)
     const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
 
     const [budgetMasterData, setBudgetMasterData] = useState<{ [key: string]: string[] }>({});
@@ -256,11 +256,6 @@ export default function CreateProject() {
         next[idx].subCategory = ''; // รีเซ็ตหมวดย่อยเมื่อเปลี่ยนหมวดหลัก
         setInstallments(next);
     };
-
-
-    // State สำหรับงวดงบประมาณ
-
-
 
     // คำนวณงบรวมทั้งหมดอัตโนมัติ
     useEffect(() => {
@@ -313,13 +308,13 @@ export default function CreateProject() {
                 toast.error("วันที่ไม่ถูกต้อง", {
                     description: `วันที่ต้องไม่ก่อน ${projectInfo.start_date}`,
                 });
-                return; // หยุดการทำงาน ไม่บันทึกค่าลง State
+                return; 
             }
             if (projectInfo.end_date && value > projectInfo.end_date) {
                 toast.error("วันที่ไม่ถูกต้อง", {
                     description: `วันที่ต้องไม่เกิน ${projectInfo.end_date}`,
                 });
-                return; // หยุดการทำงาน ไม่บันทึกค่าลง State
+                return; 
             }
         }
 
@@ -353,10 +348,9 @@ export default function CreateProject() {
             });
         });
     }, [projectInfo.start_date, projectInfo.end_date, installments]);
-    // ^ อย่าลืมใส่ installments ใน dependency เพื่อให้มันเช็คตอนมีการเพิ่ม/ลดงวดงานด้วยครับ
 
 
-    // 1. State สำหรับเก็บรายชื่อผู้รับผิดชอบ
+    //State สำหรับเก็บรายชื่อผู้รับผิดชอบ
     const [managers, setManagers] = useState([
         { id: Date.now(), name: '', role: 'Project Manager', otherRole: '' } // เพิ่ม otherRole
     ]);
@@ -364,13 +358,12 @@ export default function CreateProject() {
     const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
     const handleSearch = async (idx: number, query: string) => {
-        // อัปเดตค่าใน input ก่อน
         const next = [...managers];
         next[idx].name = query;
         setManagers(next);
 
         if (query.length > 1) { // พิมพ์มากกว่า 1 ตัวค่อยค้นหา
-            setActiveIdx(idx); // บอกว่าตอนนี้กำลังพิมพ์อยู่ที่แถวไหน
+            setActiveIdx(idx);
             try {
                 const res = await axios.get(`http://localhost:8000/api/search-users?q=${query}`);
                 setSuggestions(res.data);
@@ -416,7 +409,6 @@ export default function CreateProject() {
         const fetchTeams = async () => {
             try {
                 const res = await axios.get("http://localhost:8000/api/teams");
-                // นำค่าที่ได้จาก API ไปเก็บใน myTeams
                 setMyTeams(res.data);
             } catch (error) {
                 console.error("Error fetching teams:", error);
@@ -426,10 +418,10 @@ export default function CreateProject() {
     }, []);
 
     // ฟังก์ชันดึงข้อมูลทีมประจำ
-    // 1. State สำหรับควบคุม Modal
+    // State สำหรับควบคุม Modal
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedTeamKey, setSelectedTeamKey] = useState<string | null>(null);
-    // 2. ฟังก์ชันที่เรียกเมื่อ User เลือกทีมจาก Dropdown
+    // ฟังก์ชันที่เรียกเมื่อ User เลือกทีมจาก Dropdown
     const handleSelectTeam = (teamKey: string) => {
         if (!teamKey) return;
 
@@ -438,13 +430,13 @@ export default function CreateProject() {
 
         if (hasData) {
             setSelectedTeamKey(teamKey);
-            setModalOpen(true); // เปิดป๊อปอัพแทน Alert
+            setModalOpen(true); 
         } else {
-            executeImport(teamKey); // ถ้าฟอร์มว่างก็นำเข้าได้เลย
+            executeImport(teamKey); 
         }
     };
 
-    // 3. ฟังก์ชันนำเข้าข้อมูลจริงๆ (เรียกหลังกดยืนยันใน Modal)
+    // ฟังก์ชันนำเข้าข้อมูลจริงๆ (เรียกหลังกดยืนยันใน Modal)
     const executeImport = (teamKey: string) => {
         try {
 
@@ -457,7 +449,7 @@ export default function CreateProject() {
             }));
 
             setManagers(formattedMembers);
-            setModalOpen(false); // ปิดป๊อปอัพ
+            setModalOpen(false); 
 
             toast.success(`นำเข้าข้อมูลจากทีม ${teamKey} เรียบร้อยแล้ว`, {
                 description: `เพิ่มสมาชิกทั้งหมด ${teamData.length} คนลงในโครงการ`,
@@ -488,7 +480,7 @@ export default function CreateProject() {
         const fetchOptions = async () => {
             try {
                 const res = await axios.get('http://localhost:8000/api/evaluation-options');
-                setDbOptions(res.data); // ข้อมูลที่ได้จะมี { id, name }
+                setDbOptions(res.data);
             } catch (err) {
                 console.error("ไม่สามารถดึงข้อมูลตัวเลือกได้:", err);
             }
@@ -507,9 +499,6 @@ export default function CreateProject() {
     // Re-check
     const validateAndScroll = () => {
 
-        // ==========================================
-        // 1. เช็คข้อมูลพื้นฐานโครงการ (ใช้ requiredFields ก้อนเดิมที่เราทำไว้)
-        // ==========================================
         const requiredProjectFields = [
             { key: 'title', message: "กรุณาระบุชื่อโครงการ", ref: projectInfoRef },
             { key: 'rationale', message: "กรุณาระบุหลักการและเหตุผล", ref: projectInfoRef },
@@ -529,7 +518,7 @@ export default function CreateProject() {
         }
 
         // ==========================================
-        // 2. เช็คเปอร์เซ็นต์และรายละเอียดกิจกรรม (Phases & Tasks)
+        // เช็คเปอร์เซ็นต์และรายละเอียดกิจกรรม (Phases & Tasks)
         // ==========================================
         const totalWeight = phases.reduce((sum, phase) => {
             const phaseSum = phase.tasks.reduce((tSum, task) => tSum + Number(task.weight_percentage || 0), 0);
@@ -556,7 +545,7 @@ export default function CreateProject() {
         }
 
         // ==========================================
-        // 3. เชื่องวดงาน งบประมาณ และหมวดหมู่ค่าใช้จ่าย (Installments)
+        // เชื่องวดงาน งบประมาณ และหมวดหมู่ค่าใช้จ่าย (Installments)
         // ==========================================
         for (let i = 0; i < installments.length; i++) {
             const inst = installments[i];
@@ -585,7 +574,7 @@ export default function CreateProject() {
         }
 
         // ==========================================
-        // 4. เช็คผู้รับผิดชอบ (Managers)
+        // เช็คผู้รับผิดชอบ (Managers)
         // ==========================================
         if (managers.length === 0 || managers.some(m => !m.name || !m.name.trim())) {
             toast.error(managers.length === 0 ? "กรุณาเพิ่มผู้รับผิดชอบโครงการอย่างน้อย 1 คน" : "กรุณากรอกชื่อผู้รับผิดชอบให้ครบถ้วน");
@@ -594,7 +583,7 @@ export default function CreateProject() {
         }
 
         // ==========================================
-        // 5. เช็คผลที่คาดว่าจะได้รับและการประเมินผล
+        // เช็คผลที่คาดว่าจะได้รับและการประเมินผล
         // ==========================================
         const hasCheckedOptions = selectedOptionIds && selectedOptionIds.length > 0;
         const hasOtherText = evalOtherText && evalOtherText.trim() !== "";
@@ -637,6 +626,7 @@ export default function CreateProject() {
 
         if (!validateAndScroll()) return;
 
+        // ตรวจสอบข้อมูลวันที่และหมวดหมู่ในงวดงาน
         for (const inst of installments) {
             for (const item of inst.items) {
                 if (!item.date) {
@@ -645,11 +635,6 @@ export default function CreateProject() {
                     });
                     return;
                 }
-            }
-        }
-
-        for (const inst of installments) {
-            for (const item of inst.items) {
                 if (!item.category_id) {
                     toast.error("กรุณาเลือกหมวดหมู่ค่าใช้จ่ายให้ครบถ้วน");
                     return;
@@ -657,11 +642,31 @@ export default function CreateProject() {
             }
         }
 
+        // =======================================================
+        // คลีนข้อมูล (Data Cleansing) ก่อนส่งไปหลังบ้าน
+        // =======================================================
+
+        // คลีนไอดีทศนิยมจำลองออกจาก managers (เหลือไว้เฉพาะ user_id และ role)
+        const cleanedManagers = managers.map(({ id, ...rest }) => rest);
+
+        // คลีนไอดีจำลองออกจาก phases (และถ้าในอนาคตมี tasks ข้างใน ก็ลบ id ชั่วคราวของ task ออกด้วย)
+        const cleanedPhases = phases.map(({ id, tasks, ...rest }) => ({
+            ...rest,
+            tasks: tasks ? tasks.map(({ id: taskId, ...taskRest }: any) => taskRest) : []
+        }));
+
+        // คลีนไอดีจำลองออกจาก installments และ budget items ด้านใน
+        const cleanedInstallments = installments.map(({ id, items, ...rest }) => ({
+            ...rest,
+            items: items ? items.map(({ id: itemId, ...itemRest }) => itemRest) : []
+        }));
+        // =======================================================
+
         const payload = {
             projectInfo,
-            managers,
-            installments,
-            phases,
+            managers: cleanedManagers,       
+            installments: cleanedInstallments, 
+            phases: cleanedPhases,             
             selectedOptionIds,
             evalOtherText,
             grandTotal,
@@ -675,18 +680,25 @@ export default function CreateProject() {
 
             if (response.data.status === "success") {
                 toast.success("บันทึกโครงการเรียบร้อยแล้ว!", {
+                    id: toastId, 
                     description: `รหัสโครงการ: PRJ-${response.data.project_id}`
                 });
                 setTimeout(() => {
-                    window.location.href = "/user/my-projects"; // หรือหน้า List โครงการ
+                    window.location.href = "/user/my-projects";
                 }, 2000);
             }
         } catch (error: any) {
             console.log("PAYLOAD:", payload);
             console.log(error.response?.data);
+
+            // ดึงข้อความแจ้งเตือนความผิดพลาดจากหลังบ้านมาแสดง (ถ้ามี)
+            const errorDetail = error.response?.data?.detail
+                ? JSON.stringify(error.response.data.detail)
+                : "กรุณาตรวจสอบการกรอกข้อมูล หรือการเชื่อมต่อ Database";
+
             toast.error("เกิดข้อผิดพลาดในการบันทึก", {
-                id: toastId,// เปลี่ยนจาก Loading เป็น Error
-                description: "กรุณาตรวจสอบการเชื่อมต่อ Database"
+                id: toastId, // เปลี่ยนจาก Loading เป็น Error
+                description: errorDetail
             });
         }
     };
@@ -736,8 +748,8 @@ export default function CreateProject() {
                                 <label>วันเริ่มต้นโครงการ</label>
                                 <input
                                     type="date"
-                                    value={projectInfo.start_date} // เชื่อมกับ State
-                                    onChange={(e) => setProjectInfo({ ...projectInfo, start_date: e.target.value })} // เก็บค่าเมื่อเปลี่ยน
+                                    value={projectInfo.start_date}
+                                    onChange={(e) => setProjectInfo({ ...projectInfo, start_date: e.target.value })} 
                                     required
                                 />
                             </div>
@@ -751,8 +763,8 @@ export default function CreateProject() {
                                         <label>
                                             <input
                                                 type="checkbox"
-                                                checked={projectInfo.includeWeekend} // ดึงค่าจาก State มาแสดง
-                                                onChange={(e) => setProjectInfo({ ...projectInfo, includeWeekend: e.target.checked })} // อัปเดต State
+                                                checked={projectInfo.includeWeekend} 
+                                                onChange={(e) => setProjectInfo({ ...projectInfo, includeWeekend: e.target.checked })} 
                                                 style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                                             />
                                             รวมวันเสาร์-อาทิตย์
@@ -760,8 +772,8 @@ export default function CreateProject() {
                                         <label>
                                             <input
                                                 type="checkbox"
-                                                checked={projectInfo.includePublicHoliday} // ดึงค่าจาก State มาแสดง
-                                                onChange={(e) => setProjectInfo({ ...projectInfo, includePublicHoliday: e.target.checked })} // อัปเดต State
+                                                checked={projectInfo.includePublicHoliday} 
+                                                onChange={(e) => setProjectInfo({ ...projectInfo, includePublicHoliday: e.target.checked })} 
                                                 style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                                             />
                                             รวมวันหยุดนักขัตฤกษ์ (ไทย)
@@ -816,12 +828,12 @@ export default function CreateProject() {
 
                                 {phase.tasks.map((task, tIdx) => (
                                     <div key={tIdx} className="dynamic-row" style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
-                                        {/* 1. ชื่อกิจกรรมย่อย */}
+                                        {/* ชื่อกิจกรรมย่อย */}
                                         <input
                                             type="text"
                                             placeholder="ชื่อกิจกรรมย่อย"
                                             style={{ flex: 3 }}
-                                            value={task.task_name} // อย่าลืมเชื่อม value ด้วยครับ
+                                            value={task.task_name} 
                                             onChange={(e) => {
                                                 const newPhases = [...phases];
                                                 newPhases[pIdx].tasks[tIdx].task_name = e.target.value;
@@ -967,7 +979,7 @@ export default function CreateProject() {
                                                     value={inst.subCategory}
                                                     onChange={(e) => {
                                                         const next = [...installments];
-                                                        next[instIdx].subCategory = e.target.value; // เปลี่ยน idx เป็น instIdx
+                                                        next[instIdx].subCategory = e.target.value; 
                                                         setInstallments(next);
                                                     }}
                                                     disabled={!inst.mainCategory}
@@ -1119,7 +1131,7 @@ export default function CreateProject() {
                                     {/* ช่องเลือกตำแหน่ง */}
                                     <select
                                         style={{ flex: 1 }}
-                                        value={m.role} // เปลี่ยนจาก manager.role เป็น m.role
+                                        value={m.role} 
                                         onChange={(e) => updateManager(m.id, 'role', e.target.value)}
                                     >
                                         <option>Project Manager</option>
@@ -1238,7 +1250,7 @@ export default function CreateProject() {
                                             value={evalOtherText}
                                             onChange={(e) => setEvalOtherText(e.target.value)}
                                             placeholder="ระบุวิธีการติดตามและประเมินผลเพิ่มเติม"
-                                            // ✅ เพิ่มคลาส error ถ้าลืมกรอกช่องอื่นๆ
+                                            // เพิ่มคลาส error ถ้าลืมกรอกช่องอื่นๆ
                                             style={{ width: '100%', borderStyle: 'dashed', padding: '10px' }}
                                         />
                                     )}

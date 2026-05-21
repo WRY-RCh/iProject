@@ -1,6 +1,4 @@
-/* frontend/app/globals.css */
-
-/* 1. Import Fonts และตั้งค่าพื้นฐาน */
+/* Import Fonts และตั้งค่าพื้นฐาน */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Prompt:wght@300;400;500;600&display=swap');
 
 :root {
@@ -324,6 +322,11 @@ hr {
     font-weight: 600;
     color: var(--text-dark);
     margin-left: 4px;
+}
+
+.pre-line-text {
+    white-space: pre-line;
+    word-break: break-word;
 }
 
 /* Input Styles */
@@ -1833,6 +1836,565 @@ body {
     font-size: 13px;
 }
 
+/* กล่องหุ้มแต่ละเฟสแบบใหม่ (Modern Minimalist Box) */
+.iproject-phase-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* ส่วนหัวเฟสปรับให้กระชับและดูเด่น */
+.iproject-phase-header {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.iproject-phase-header .icon-blueprint {
+    color: #2563eb; /* สีน้ำเงิน iProject */
+    font-size: 1.1rem;
+}
+
+.phase-title-text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* ปรับแต่งโครงสร้างตารางใหม่ให้ Compact */
+.iproject-task-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.iproject-task-table th {
+    background-color: #ffffff;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.iproject-task-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.iproject-task-table tr:last-child td {
+    border-bottom: none; /* ลบเส้นขอบแถวสุดท้ายออกเพื่อความคลีน */
+}
+
+/* ส่วนแสดงผลข้อมูลในแถว */
+.task-title-inline {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #334155;
+    line-height: 1.4;
+}
+
+.task-meta-inline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 3px;
+}
+
+.task-weight-text {
+    font-size: 0.92rem;
+    color: #0f172a;
+}
+
+/* ไอคอนสถานะแบบคลีน */
+.task-status-done {
+    color: #10b981; /* สีเขียวติ๊กถูก */
+    font-size: 1.15rem;
+}
+
+.task-status-ongoing {
+    color: #64748b; /* วงกลมสีเทาเรียบๆ มินิมอล */
+    font-size: 1.15rem;
+}
+
+/* แถวกรณีไม่มีข้อมูล */
+.task-empty-row {
+    text-align: center;
+    padding: 20px !important;
+    color: #94a3b8;
+    font-size: 0.88rem;
+}
+
+.iproject-empty-state {
+    text-align: center;
+    padding: 32px;
+    color: #94a3b8;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+}
+
+/* กล่องหุ้มแต่ละงวดงาน (Modern Budget Card) */
+.iproject-installment-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* ส่วนหัวงวดงาน จัดให้อยู่ระนาบเดียวกันแบบกระจายซ้ายขวา */
+.iproject-installment-header {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.installment-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.iproject-installment-header .icon-wallet {
+    color: #0ea5e9; /* สีฟ้าสไตล์ Financial */
+    font-size: 1.1rem;
+}
+
+.installment-title-text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* ส่วนจัดการป้าย Tag */
+.iproject-meta-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.badge-main {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge-sub {
+    background-color: #f0fdf4;
+    color: #166534;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge-status {
+    background-color: #fff7ed;
+    color: #c2410c;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* ปรับแต่งโครงสร้างตารางงบประมาณ */
+.iproject-budget-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.iproject-budget-table th {
+    background-color: #ffffff;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.iproject-budget-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.iproject-budget-table tr:last-child td {
+    border-bottom: none; /* คลีนเส้นขอบแถวสุดท้ายออก */
+}
+
+/* รายละเอียดข้อความด้านในแถว */
+.budget-item-detail {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #334155;
+    line-height: 1.4;
+}
+
+.budget-item-category {
+    font-size: 0.85rem;
+    color: #64748b;
+    background-color: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.budget-item-amount {
+    font-size: 0.95rem;
+    color: #0f172a;
+}
+
+/* กรณีไม่มีข้อมูลย่อยภายในงวด */
+.iproject-budget-empty-row {
+    text-align: center;
+    padding: 18px;
+    color: #94a3b8;
+    font-size: 0.88rem;
+    background-color: #ffffff;
+}
+
+.iproject-empty-state {
+    text-align: center;
+    padding: 32px;
+    color: #94a3b8;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+}
+/* ป้ายสถานะจ่ายเงินแล้ว (สีเขียวพาสเทล) */
+.budget-status-paid {
+    background-color: #d1fae5;
+    color: #065f46;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* ป้ายสถานะยังไม่จ่าย (สีเทา/ส้มอ่อน มินิมอล) */
+.budget-status-unpaid {
+    background-color: #f1f5f9;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.inst-badge-approved { background-color: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; display: inline-flex; align-items: center; margin-left: 8px; }
+.inst-badge-pending { background-color: #fffbeb; color: #9a3412; border: 1px solid #fef3c7; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; display: inline-flex; align-items: center; margin-left: 8px; }
+.inst-badge-rejected { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; display: inline-flex; align-items: center; margin-left: 8px; }
+
+
+/* กล่องภาพรวมความคืบหน้าโฉมใหม่ */
+.iproject-progress-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.progress-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.progress-card-header .icon-wrap {
+    background-color: #eff6ff;
+    color: #2563eb;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.progress-sub-text {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 2px 0 0 0;
+}
+
+.progress-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* จัดบล็อกตัวเลขและสถานะ */
+.progress-number-block {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.big-progress {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+/* ป้ายสถานะไดนามิก */
+.progress-status-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.progress-status-badge.status-ongoing {
+    background-color: #f0fdf4;
+    color: #166534;
+}
+
+.progress-status-badge.status-success {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+/* โครงสร้างหลอดโหลด */
+.iproject-progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background-color: #f1f5f9;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.iproject-progress-bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.5s ease-in-out; /* เวลาอัปเดตสถานะหลอดจะเลื่อนสมูทขึ้น */
+}
+
+/* สีหลอดโหลดตอนกำลังทำ และตอนเสร็จสมบูรณ์ */
+.fill-primary {
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.fill-success {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+/* จัดกลุ่มการ์ดการเงินเป็น 3 คอลัมน์ตอนจอใหญ่ และหดเหลือคอลัมน์เดียวตอนจอมือถือ */
+.iproject-financial-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* สไตล์พื้นฐานของการ์ดสรุปการเงิน */
+.budget-summary-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.summary-amount {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+.summary-note {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.card-total { border-left: 4px solid #64748b; }
+.icon-total { color: #64748b; background: #f1f5f9; padding: 6px; border-radius: 6px; }
+
+.card-paid { border-left: 4px solid #10b981; }
+.icon-paid { color: #10b981; background: #e6fdf5; padding: 6px; border-radius: 6px; }
+.text-success { color: #059669 !important; }
+
+.card-remaining { border-left: 4px solid #f59e0b; }
+.icon-remaining { color: #f59e0b; background: #fffbeb; padding: 6px; border-radius: 6px; }
+.text-warning { color: #d97706 !important; }
+
+/* การ์ดหลักผู้รับผิดชอบโครงการ */
+.iproject-team-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.team-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.team-card-header .team-icon-wrap {
+    background-color: #f0fdf4;
+    color: #166534;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+}
+
+.team-sub-text {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 2px 0 0 0;
+}
+
+/* จัดเลย์เอาต์สมาชิกเป็นสไตล์ Grid ผ่อนคลายสายตา */
+.iproject-member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+/* กล่องย่อยของสมาชิกแต่ละคน */
+.iproject-member-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.iproject-member-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    background-color: #ffffff;
+    border-color: #cbd5e1;
+}
+
+/* ปรับแต่งวงกลม Avatar */
+.iproject-member-avatar-wrap {
+    position: relative;
+}
+
+.iproject-member-avatar {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(29, 78, 216, 0.2);
+    text-transform: uppercase;
+}
+
+/* บล็อกแสดงชื่อและป้ายสถานะ */
+.iproject-member-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.member-fullname {
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* รูปแบบพื้นฐานของป้ายตำแหน่ง Role Badge */
+.iproject-role-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 🎨 แยกสีตามบทบาทหน้าที่ */
+.role-badge-manager {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.role-badge-dev {
+    background-color: #f5f3ff;
+    color: #6d28d9;
+    border: 1px solid #ddd6fe;
+}
+
+.role-badge-admin {
+    background-color: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #ffedd5;
+}
+
+.role-badge-member {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+
+
+
 @media (max-width: 900px) {
     .project-view-nav {
         padding: 15px 20px;
@@ -1854,6 +2416,325 @@ body {
     .project-view-nav-links {
         display: none;
     }
+}
+
+/* รูปแบบกล่อง Instruction ด้านบนสุด */
+.iproject-alert-instruction {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.iproject-alert-instruction .icon-info-alert {
+    color: #0284c7;
+    margin-top: 2px;
+    font-size: 1rem;
+}
+
+.iproject-alert-instruction .instruction {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #0369a1;
+    line-height: 1.4;
+}
+
+/* สไตล์ Element ในฟอร์ม */
+.iproject-modern-form .form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.iproject-modern-form label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.iproject-modern-form .text-primary-label { color: #2563eb; }
+.iproject-modern-form .text-warning-label { color: #d97706; }
+
+/* ช่อง Input / Select / Textarea */
+.iproject-select, .iproject-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    color: #1e293b;
+    background-color: #ffffff;
+    transition: border-color 0.15s ease;
+}
+
+.iproject-select:focus, .iproject-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ช่องแบบให้อ่านได้อย่างเดียว (Read-only) */
+.iproject-textarea-disabled {
+    background-color: #f8fafc;
+    color: #64748b;
+    border-color: #e2e8f0;
+    cursor: not-allowed;
+    font-style: italic;
+}
+
+/* ส่วนท้ายจัดการจัดวางปุ่มกด */
+.iproject-modal-footer-flex {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-cancel-modern {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-cancel-modern:hover { background-color: #e2e8f0; }
+
+.btn-send-modern {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15);
+}
+
+.btn-send-modern:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+.iproject-modal-scroll {
+    max-height: 70vh; /* จำกัดความสูงของฟอร์มไว้ไม่ให้ล้นหน้าจอเกิน 70% */
+    overflow-y: auto;  /* หากเนื้อฟอร์มยาวเกิน ให้เกิด Scrollbar ด้านในฟอร์มเอง */
+    padding-right: 8px;
+}
+
+/* ปุ่มย้อนกลับหน้าโครงการหลัก */
+.btn-back-project {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-back-project:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+/* ปุ่มกดยืนยันการจ่ายเงินของงวดงาน */
+.btn-action-pay {
+    transition: background-color 0.2s, transform 0.1s;
+}
+.btn-action-pay:hover {
+    background-color: #1d4ed8 !important;
+    transform: scale(1.02);
+}
+
+/* 🎨 Theme ครอบรวมความพรีเมียม */
+.iproject-update-theme {
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+
+/* แถบเมนูด้านบน */
+.iproject-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 80px; background-color: white; border-bottom: 1px solid #e2e8f0;
+    position: sticky; top: 0; z-index: 100;
+}
+.nav-logo { font-size: 24px; font-weight: 800; color: #0f172a; cursor: pointer; }
+.nav-right { display: flex; align-items: center; gap: 30px; }
+.nav-link-item { font-size: 14px; font-weight: 600; color: #0f172a; cursor: pointer; }
+.nav-link-item:hover { color: #1e40af; }
+
+/* โครงสร้างปุ่ม Dropdown */
+.dropdown-trigger-btn {
+    display: flex; align-items: center; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 16px; border-radius: 50px; cursor: pointer;
+}
+.avatar-circle { width: 32px; height: 32px; background: #1e40af; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+.user-meta-text { text-align: left; }
+.user-fullname { font-size: 13px; font-weight: 700; color: #0f172a; margin: 0; }
+.user-role-lbl { font-size: 11px; color: #64748b; margin: 0; }
+
+.dropdown-menu-list {
+    position: absolute; right: 0; top: 50px; background: white; min-width: 200px; border-radius: 15px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 8px 0; overflow: hidden;
+}
+.menu-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: #0f172a; font-size: 14px; font-weight: 600; cursor: pointer; }
+.menu-item:hover { background-color: #f8fafc; color: #1e40af; }
+.menu-divider { border: 0; border-top: 1px solid #e2e8f0; margin: 8px 0; }
+
+/* แผ่นคอนเทนเนอร์และบอร์ด */
+.container-update-layout { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+.summary-banner {
+    background: #1e40af; color: white; border-radius: 20px; padding: 30px;
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+}
+.banner-sub { font-size: 12px; opacity: 0.8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+
+.update-card { background: white; border-radius: 24px; padding: 35px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+.section-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: #1e40af; display: flex; align-items: center; gap: 10px; }
+.section-title span { background: #f472b6; width: 4px; height: 20px; border-radius: 10px; }
+.section-desc { font-size: 13px; color: #64748b; margin-bottom: 25px; }
+
+/* สไตล์รายการ Checklist */
+.phase-group-wrap { margin-bottom: 24px; }
+.phase-inner-title { font-size: 14px; color: #475569; margin-bottom: 12px; font-weight: 700; }
+
+.html-task-item {
+    display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: 15px;
+    border: 1px solid transparent; transition: 0.3s; margin-bottom: 10px; cursor: pointer;
+    background-color: #ffffff; border: 1px solid #e2e8f0;
+}
+.html-task-item:hover { background: #f8fafc; }
+.html-task-item.completed { background: #f0fdf4; border-color: #bbf7d0; }
+
+.html-task-item input[type="checkbox"] { width: 19px; height: 19px; accent-color: #10b981; cursor: pointer; }
+.task-info { flex: 1; }
+.task-info b { font-size: 15px; display: block; color: #0f172a; }
+.task-info span { font-size: 12px; color: #64748b; }
+
+/* สไตล์ตารางรายงวดงบประมาณ */
+.inst-table-wrap { margin-bottom: 30px; }
+.inst-table-title { font-size: 14px; color: #64748b; margin-bottom: 12px; font-weight: 700; }
+
+.html-budget-table { width: 100%; border-collapse: collapse; }
+.html-budget-table th { text-align: left; padding: 12px; font-size: 12px; color: #64748b; border-bottom: 1px solid #e2e8f0; }
+.html-budget-table td { padding: 15px 12px; border-bottom: 1px solid #f8fafc; font-size: 14px; }
+
+.status-pill { padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; }
+.status-pill.unpaid { background: #fee2e2; color: #991b1b; }
+.status-pill.paid { background: #dcfce7; color: #166534; }
+
+.btn-pay {
+    background: #0f172a; color: white; border: none; padding: 6px 12px;
+    border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s;
+}
+.btn-pay:hover { background: #1e40af; }
+
+.btn-save {
+    background: #10b981; color: white; border: none; padding: 18px 40px;
+    border-radius: 50px; font-size: 16px; font-weight: 800; cursor: pointer; width: 100%; text-align: center;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); transition: 0.2s;
+}
+.btn-save:hover { background: #059669; transform: translateY(-1px); }
+
+/* 🏆 CSS สำหรับหน้า Result สรุปผล */
+.iproject-result-theme {
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+
+.container-result-layout {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Success Banner หรูหรา */
+.success-banner {
+    background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.2);
+}
+.success-banner i { font-size: 60px; margin-bottom: 20px; }
+.success-banner h1 { font-size: 32px; font-weight: 800; }
+
+.result-card {
+    background: white;
+    border-radius: 24px;
+    padding: 35px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+}
+
+.result-form-group label {
+    display: block;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #1e293b;
+}
+
+.result-form-group textarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #e2e8f0;
+    font-size: 14px;
+    margin-bottom: 20px;
+    background-color: #fcfcfc;
+}
+
+/* พื้นที่อัปโหลดรายงาน */
+.result-upload-area {
+    border: 2px dashed #e2e8f0;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #fafafa;
+}
+.result-upload-area:hover {
+    border-color: #1e40af;
+    background: #f0f7ff;
+}
+.result-upload-area i { font-size: 40px; color: #64748b; margin-bottom: 15px; }
+
+.btn-close-project {
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 20px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 800;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-close-project:hover {
+    background: #1e40af;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.result-footer {
+    text-align: center;
+    padding-bottom: 40px;
+    font-size: 13px;
+    color: #64748b;
 }
 
 @media (max-width: 1024px) {

@@ -8,7 +8,6 @@ const api = axios.create({
 });
 
 export const getUsers = async () => {
-  // ดึงข้อมูลจาก @app.get("/api/admin/users") ใน main.py
   const response = await api.get('/admin/users');
   return response.data;
 };

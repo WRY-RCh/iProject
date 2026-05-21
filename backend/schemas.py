@@ -119,41 +119,42 @@ class BudgetMainCategorySchema(BaseModel):
     class Config:
         from_attributes = True
 
-# สำหรับส่งข้อมูลรูปแบบที่ Next.js เอาไปใช้ง่ายๆ (แบบ Object/Dictionary)
-# { "หมวดหลัก": ["หมวดย่อย 1", "หมวดย่อย 2"] }
+# สำหรับส่งข้อมูลรูปแบบ Object/Dictionary
 class BudgetMasterData(BaseModel):
     categories: dict[str, List[str]]
 
-# 1. กิจกรรมย่อย (Tasks)
+# กิจกรรมย่อย (Tasks)
 class TaskSchema(BaseModel):
     task_name: str
     duration: int
     duration_unit: str
-    weight_percentage: int  # บังคับเป็นตัวเลข
+    weight_percentage: int
+    status: Optional[bool] = False
 
-# 2. ขั้นตอนหลัก (Phases)
+# ขั้นตอนหลัก (Phases)
 class PhaseSchema(BaseModel):
-    id: int
+    id: Optional[int] = None
     phase_name: str
     tasks: List[TaskSchema]
 
-# 3. รายการงบประมาณย่อย (Items)
+# รายการงบประมาณย่อย (Items)
 class BudgetItemSchema(BaseModel):
-    id: int
+    id: Optional[int] = None
     detail: str
     category_id: int
     date: date
     amount: float
 
-# 4. งวดงาน (Installments)
+# งวดงาน (Installments)
 class InstallmentSchema(BaseModel):
-    id: int
+    id: Optional[int] = None
     title: str
     mainCategory: str
     subCategory: str
+    is_approved: Optional[bool] = False
     items: List[BudgetItemSchema]
 
-# 5. ข้อมูลโครงการหลัก
+# ข้อมูลโครงการหลัก
 class ProjectInfoSchema(BaseModel):
     title: str
     rationale: str
@@ -166,8 +167,9 @@ class ProjectInfoSchema(BaseModel):
     status: bool
     includeWeekend: bool
     includePublicHoliday: bool
+    is_deleted: Optional[bool] = False
 
-# 6. ก้อนใหญ่ที่รับมาจาก Frontend (The Payload)
+# ก้อนใหญ่ที่รับมาจาก Frontend (The Payload)
 class ProjectCreateRequest(BaseModel):
     projectInfo: ProjectInfoSchema
     managers: List[ManagerSchema]
@@ -180,7 +182,7 @@ class ProjectCreateRequest(BaseModel):
 
 
 class ManagerSchema(BaseModel):
-    id: int
+    id: Optional[int] = None
     name: str
     role: str
     otherRole: Optional[str] = ""
@@ -200,3 +202,4 @@ class BudgetItemSchema(BaseModel):
     category_id: int 
     date: date
     amount: float
+    status: Optional[bool] = False
